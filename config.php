@@ -11,11 +11,30 @@ if (USE_SUPABASE) {
     // ============================================
     // SUPABASE POSTGRESQL CONNECTION
     // ============================================
-    $servername = "db.eusitxkhvigerzeslsym.supabase.co";
-    $username = "postgres";
-    $password = "imatt223759";
-    $database = "postgres";
-    $port = "5432";
+    // Load credentials from environment variables or .env file
+    // NEVER hardcode credentials in version-controlled files
+    
+    // Try to load from environment variables first
+    $servername = getenv('SUPABASE_HOST') ?: ($_ENV['SUPABASE_HOST'] ?? '');
+    $username = getenv('SUPABASE_USER') ?: ($_ENV['SUPABASE_USER'] ?? 'postgres');
+    $password = getenv('SUPABASE_PASSWORD') ?: ($_ENV['SUPABASE_PASSWORD'] ?? '');
+    $database = getenv('SUPABASE_DATABASE') ?: ($_ENV['SUPABASE_DATABASE'] ?? 'postgres');
+    $port = getenv('SUPABASE_PORT') ?: ($_ENV['SUPABASE_PORT'] ?? '5432');
+    
+    // Fallback: Load from .env.local file if it exists (not version controlled)
+    $envFile = __DIR__ . '/.env.local';
+    if (empty($servername) && file_exists($envFile)) {
+        $envVars = parse_ini_file($envFile);
+        $servername = $envVars['SUPABASE_HOST'] ?? '';
+        $username = $envVars['SUPABASE_USER'] ?? 'postgres';
+        $password = $envVars['SUPABASE_PASSWORD'] ?? '';
+        $database = $envVars['SUPABASE_DATABASE'] ?? 'postgres';
+        $port = $envVars['SUPABASE_PORT'] ?? '5432';
+    }
+    
+    if (empty($servername) || empty($password)) {
+        die("Supabase credentials not configured. Please set environment variables or create .env.local file.");
+    }
     
     try {
         $dsn = "pgsql:host=$servername;port=$port;dbname=$database";
@@ -128,31 +147,62 @@ if (USE_SUPABASE) {
         private $stmt;
         private $rows = null;
         private $error = null;
+        private $rowCount = null;
+        private $fetchIndex = 0;  // Track current position for iteration
         
         public function __construct($stmt, $error = null) {
             $this->stmt = $stmt;
             $this->error = $error;
         }
         
+        // Ensure rows are loaded into cache
+        private function ensureRowsLoaded() {
+            if ($this->rows === null && $this->stmt) {
+                $this->rows = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+                $this->rowCount = count($this->rows);
+            }
+        }
+        
         public function fetch_assoc() {
             if ($this->error) throw new Exception($this->error);
+            
+            // If rows were already fetched (for count or fetch_all), iterate through cache
+            if ($this->rows !== null) {
+                if ($this->fetchIndex < count($this->rows)) {
+                    return $this->rows[$this->fetchIndex++];
+                }
+                return false;
+            }
+            
+            // Otherwise fetch directly from statement
             return $this->stmt ? $this->stmt->fetch(PDO::FETCH_ASSOC) : false;
         }
         
         public function fetch_all($mode = null) {
             if ($this->error) throw new Exception($this->error);
-            if ($this->rows === null && $this->stmt) {
-                $this->rows = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-            }
+            $this->ensureRowsLoaded();
             return $this->rows ?: [];
         }
         
         public function num_rows() {
-            return $this->stmt ? $this->stmt->rowCount() : 0;
+            // PDO rowCount() doesn't work reliably for SELECT statements
+            // We need to fetch all rows and count them
+            if ($this->rowCount === null) {
+                $this->ensureRowsLoaded();
+                if ($this->rows === null) {
+                    $this->rowCount = 0;
+                }
+            }
+            return $this->rowCount;
         }
         
         public function __get($name) {
             return $name === 'num_rows' ? $this->num_rows() : null;
+        }
+        
+        // Reset iteration position (useful for re-iterating)
+        public function reset() {
+            $this->fetchIndex = 0;
         }
     }
     

@@ -1,11 +1,11 @@
 <?php
 session_start();
-include 'config.php';
-include 'sidebar.php';
+// Authentication check MUST be before any output
 if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
     header('Location: index.php');
     exit();
 }
+include 'config.php';
 
 $message = '';
 $message_type = '';
@@ -31,6 +31,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'edit') {
     $obtained_marks = intval($_POST['obtained_marks']);
     $total_marks = intval($_POST['total_marks']);
     
+    // Validate marks
+    if ($total_marks <= 0) {
+        $message = "Error: Total marks must be greater than 0";
+        $message_type = 'error';
+    } elseif ($obtained_marks < 0) {
+        $message = "Error: Obtained marks cannot be negative";
+        $message_type = 'error';
+    } elseif ($obtained_marks > $total_marks) {
+        $message = "Error: Obtained marks ($obtained_marks) cannot exceed total marks ($total_marks)";
+        $message_type = 'error';
+    } else {
     // Auto-calculate grade
     $percentage = ($obtained_marks / $total_marks) * 100;
     if ($percentage >= 90) $grade = 'A+';
@@ -55,6 +66,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'edit') {
         $message_type = 'error';
     }
     $stmt->close();
+    } // Close validation else block
 }
 
 // Filters
@@ -312,6 +324,7 @@ $subjects_result = $conn->query("SELECT id, subject_code, subject_name FROM subj
     </style>
 </head>
 <body>
+    <?php include 'sidebar.php'; ?>
     <div class="container">
         <div class="content">
             <div class="page-container">

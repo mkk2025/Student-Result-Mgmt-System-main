@@ -1,11 +1,11 @@
 <?php
 session_start();
-include 'config.php';
-include 'sidebar.php';
+// Authentication check MUST be before any output
 if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
     header('Location: index.php');
     exit();
 }
+include 'config.php';
 
 $message = '';
 $message_type = '';
@@ -303,6 +303,7 @@ $years_result = $conn->query("SELECT DISTINCT c_year FROM users WHERE role = 'cl
     </style>
 </head>
 <body>
+    <?php include 'sidebar.php'; ?>
     <div class="container">
         <div class="content">
             <div class="page-container">

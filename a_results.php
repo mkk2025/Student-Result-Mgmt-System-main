@@ -1,11 +1,11 @@
 <?php
 session_start();
-include 'config.php';
-include 'sidebar.php';
+// Authentication check MUST be before any output
 if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
     header('Location: index.php');
     exit();
 }
+include 'config.php';
 
 $message = '';
 $message_type = '';
@@ -44,6 +44,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $semester = $_POST['semester'];
     $academic_year = $_POST['academic_year'];
     
+    // Validate marks
+    if ($total_marks <= 0) {
+        $message = "Error: Total marks must be greater than 0";
+        $message_type = 'error';
+    } elseif ($obtained_marks < 0) {
+        $message = "Error: Obtained marks cannot be negative";
+        $message_type = 'error';
+    } elseif ($obtained_marks > $total_marks) {
+        $message = "Error: Obtained marks ($obtained_marks) cannot exceed total marks ($total_marks)";
+        $message_type = 'error';
+    } else {
     // Auto-calculate grade based on percentage
     $percentage = ($obtained_marks / $total_marks) * 100;
     if ($percentage >= 90) $grade = 'A+';
@@ -113,6 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Error: " . $e->getMessage();
         $message_type = 'error';
     }
+    } // Close validation else block
 }
 ?>
 
@@ -241,6 +253,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
+    <?php include 'sidebar.php'; ?>
     <div class="container">
         <div class="content">
             <div class="upload-container">

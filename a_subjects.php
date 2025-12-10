@@ -1,11 +1,11 @@
 <?php
 session_start();
-include 'config.php';
-include 'sidebar.php';
+// Authentication check MUST be before any output
 if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
     header('Location: index.php');
     exit();
 }
+include 'config.php';
 
 $message = '';
 $message_type = '';
@@ -92,8 +92,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Fetch all subjects
-$subjects = $conn->query("SELECT s.*, COUNT(m.id) as grade_count FROM subjects s LEFT JOIN marks m ON s.id = m.subject_id GROUP BY s.id ORDER BY s.subject_name");
+// Fetch all subjects - PostgreSQL requires all non-aggregated columns in GROUP BY
+$subjects = $conn->query("SELECT s.id, s.subject_code, s.subject_name, COUNT(m.id) as grade_count FROM subjects s LEFT JOIN marks m ON s.id = m.subject_id GROUP BY s.id, s.subject_code, s.subject_name ORDER BY s.subject_name");
 ?>
 
 <!DOCTYPE html>
@@ -288,6 +288,7 @@ $subjects = $conn->query("SELECT s.*, COUNT(m.id) as grade_count FROM subjects s
     </style>
 </head>
 <body>
+    <?php include 'sidebar.php'; ?>
     <div class="container">
         <div class="content">
             <div class="page-container">
