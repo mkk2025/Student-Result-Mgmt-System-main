@@ -1,0 +1,126 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+html{/*
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;*/
+    height:100%;
+    background: url('bg.jpg') no-repeat center center fixed;
+    background-size: 100% 100%;
+}
+body {
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    /*display: flex;
+    justify-content: center;
+    align-items: center;*/
+    height: 100%;
+}
+
+
+.sidebar {
+    height: 100%;
+    position: fixed;
+    left:0;
+    top: 0;
+    padding-top: 20px;
+    width:300px;
+    background-color:#18283b;
+    /*background-color: hsla(0, 71%, 12%, 0.302);*/
+    border-radius: 10px;
+    /*box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);*/
+    backdrop-filter: blur(10px);
+    color: white;
+    box-sizing: border-box;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    text-align: center;
+    
+}
+
+.sidebar ul li a {
+    color:#8392a5;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar ul li a:hover {
+    background-color: #2c3e50;
+}
+.container {
+    /*
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    */
+    margin-left:300px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    /*flex-grow: 1;
+    width:100%;
+    padding: 10px;
+    box-sizing: border-box;*/
+    flex: 2; /* Takes remaining space, pushes footer down */
+    padding: 20px;
+
+}
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 15px 0;
+    text-decoration: none;
+    font-size: 18px;
+    
+}
+
+.sidebar a.active {
+    background-color:#2c3e50;/*#575757; Highlight the active page */
+    font-weight: bold;
+    color:#f5f6fa;; /* Optional: Add a different color for active link text */
+}
+/* Footer styling */
+.footer {
+    /*
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    color: gray;
+    font-size: 14px;
+    background-color: #333;*/
+    color:#18283b;/*cadetblue;*/
+    text-align: center;
+    padding: 5px;
+    width: 100%;
+    /*background-color: hsla(0, 71%, 12%, 0.302);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);*/
+}
+
+footer p {
+    
+    font-size: 14px;
+}
+@font-face {
+    font-family: 'Prism';
+    src: url('fonts/Prism.ttf') format('truetype');
+    }
+h1{
+    font-family:'Prism';
+    }

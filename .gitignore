@@ -1,0 +1,25 @@
+# Database credentials (keep config.php but ignore sensitive data)
+# config.php
+
+# Logs
+*.log
+/tmp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Temporary files
+*.tmp
+
