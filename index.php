@@ -42,17 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         
         if ($password_valid) {
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['role'] = $user['role'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['role'] = $user['role'];
             $_SESSION['enroll_no'] = $user['enroll_no'];
-            $_SESSION['course'] = $user['course'];
-            $_SESSION['c_year'] = $user['c_year'];
+        $_SESSION['course'] = $user['course'];
+        $_SESSION['c_year'] = $user['c_year'];
             $stmt->close();
             if ($_SESSION['role'] == 'client') {
-                header('Location: dashboard.php');
+        header('Location: dashboard.php');
             } else {
                 header('Location: a_dashboard.php');
-            }
+        }
             exit();
         }
     }

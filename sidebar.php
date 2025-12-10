@@ -8,8 +8,8 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// Get the current page name
-$currentPage = basename($_SERVER['PHP_SELF']);
+    // Get the current page name
+    $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!-- Sidebar Styles -->
@@ -183,7 +183,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <!-- Sidebar Overlay -->
 <div class="sidebar-overlay" onclick="closeSidebar()"></div>
 
-<div class="sidebar">
+        <div class="sidebar">
     <div class="sidebar-logo">
         <img src="IMATT-LOGO-PNG.png" alt="IMATT College Logo">
     </div>
@@ -193,8 +193,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <div class="role"><?php echo $_SESSION['role'] == 'admin' ? '👨‍🏫 Lecturer' : '👨‍🎓 Student'; ?></div>
     </div>
     
-    <ul>
-        <?php if ($_SESSION['role'] == 'admin'): ?>
+            <ul>
+                <?php if ($_SESSION['role'] == 'admin'): ?>
             <div class="sidebar-section">Dashboard</div>
             <li><a href="a_dashboard.php" class="<?php if ($currentPage == 'a_dashboard.php') echo 'active'; ?>">📊 Dashboard</a></li>
             
@@ -204,28 +204,33 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             
             <div class="sidebar-section">Grades</div>
             <li><a href="a_results.php" class="<?php if ($currentPage == 'a_results.php') echo 'active'; ?>">📝 Upload Grades</a></li>
+            <li><a href="a_bulk_upload.php" class="<?php if ($currentPage == 'a_bulk_upload.php') echo 'active'; ?>">📊 Bulk Upload (CSV)</a></li>
             <li><a href="a_view_grades.php" class="<?php if ($currentPage == 'a_view_grades.php') echo 'active'; ?>">📋 View/Edit Grades</a></li>
             
             <div class="sidebar-section">Subjects</div>
             <li><a href="a_subjects.php" class="<?php if ($currentPage == 'a_subjects.php') echo 'active'; ?>">📚 Manage Subjects</a></li>
             
+            <div class="sidebar-section">Reports</div>
+            <li><a href="a_reports.php" class="<?php if ($currentPage == 'a_reports.php') echo 'active'; ?>">📊 Reports & Analytics</a></li>
+            
             <div class="sidebar-section">Settings</div>
             <li><a href="cpassword.php" class="<?php if ($currentPage == 'cpassword.php') echo 'active'; ?>">🔑 Change Password</a></li>
             
-        <?php else: ?>
+                <?php else: ?>
             <div class="sidebar-section">Dashboard</div>
             <li><a href="dashboard.php" class="<?php if ($currentPage == 'dashboard.php') echo 'active'; ?>">📊 Dashboard</a></li>
             
             <div class="sidebar-section">Academics</div>
             <li><a href="s_results.php" class="<?php if ($currentPage == 's_results.php') echo 'active'; ?>">📜 View Results</a></li>
+            <li><a href="generate_transcript.php" class="<?php if ($currentPage == 'generate_transcript.php') echo 'active'; ?>">📄 Download Transcript</a></li>
             
             <div class="sidebar-section">Settings</div>
             <li><a href="cpassword.php" class="<?php if ($currentPage == 'cpassword.php') echo 'active'; ?>">🔑 Change Password</a></li>
-        <?php endif; ?>
-    </ul>
+                <?php endif; ?>
+            </ul>
     
     <a href="logout.php" class="logout-btn">🚪 Logout</a>
-</div>
+        </div>
 
 <script>
     function toggleSidebar() {

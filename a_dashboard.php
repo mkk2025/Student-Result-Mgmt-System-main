@@ -137,8 +137,10 @@ $pending_results = 0; // Can be calculated based on your business logic
                         <div style="margin-top: 20px;">
                             <a href="a_view_students.php" class="action-btn">👥 View Students</a>
                             <a href="a_results.php" class="action-btn">📝 Upload Grades</a>
+                            <a href="a_bulk_upload.php" class="action-btn">📊 Bulk Upload</a>
                             <a href="a_view_grades.php" class="action-btn">📋 View Grades</a>
                             <a href="a_subjects.php" class="action-btn">📚 Manage Subjects</a>
+                            <a href="a_reports.php" class="action-btn">📊 Reports</a>
                         </div>
                     </div>
                 </div>
