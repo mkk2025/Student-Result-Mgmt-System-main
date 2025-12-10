@@ -33,40 +33,74 @@ $pending_results = 0; // Can be calculated based on your business logic
         <style>
             .dashboard-stats {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 20px;
-                margin: 20px 0;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 25px;
+                margin: 25px 0;
             }
             .stat-card {
-                background: rgba(255, 255, 255, 0.95);
-                padding: 25px;
-                border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
                 text-align: center;
-                border-left: 4px solid #C8102E;
+                border-left: 5px solid #E63946;
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
             }
             .stat-card h3 {
                 color: #666;
                 font-size: 14px;
-                margin-bottom: 10px;
+                margin-bottom: 15px;
                 text-transform: uppercase;
+                letter-spacing: 1px;
             }
             .stat-card .number {
-                color: #C8102E;
-                font-size: 36px;
+                color: #E63946;
+                font-size: 42px;
                 font-weight: bold;
-                margin: 10px 0;
+                margin: 15px 0;
             }
             .welcome-section {
-                background: rgba(255, 255, 255, 0.95);
-                padding: 30px;
-                border-radius: 10px;
+                background: linear-gradient(135deg, #E63946 0%, #D62839 100%);
+                color: white;
+                padding: 35px;
+                border-radius: 15px;
                 margin-bottom: 30px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
             }
             .welcome-section h1 {
-                color: #C8102E;
+                color: white;
                 margin-bottom: 10px;
+            }
+            .welcome-section p {
+                opacity: 0.95;
+            }
+            .action-card {
+                background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+            .action-btn {
+                display: inline-block;
+                padding: 15px 30px;
+                background: #E63946;
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                margin: 10px;
+                transition: all 0.3s;
+                font-weight: 500;
+                font-size: 16px;
+            }
+            .action-btn:hover {
+                background: #D62839;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
             }
         </style>
     </head>
@@ -100,9 +134,9 @@ $pending_results = 0; // Can be calculated based on your business logic
                     
                     <div class="stat-card">
                         <h3>Quick Actions</h3>
-                        <div style="margin-top: 15px;">
-                            <a href="a_students.php" style="display: inline-block; padding: 8px 15px; background: #C8102E; color: white; text-decoration: none; border-radius: 5px; margin: 5px;">Manage Students</a><br>
-                            <a href="a_results.php" style="display: inline-block; padding: 8px 15px; background: #C8102E; color: white; text-decoration: none; border-radius: 5px; margin: 5px;">Upload Grades</a>
+                        <div style="margin-top: 20px;">
+                            <a href="a_students.php" class="action-btn">Manage Students</a>
+                            <a href="a_results.php" class="action-btn">Upload Grades</a>
                         </div>
                     </div>
                 </div>

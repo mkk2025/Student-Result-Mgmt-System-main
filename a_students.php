@@ -90,8 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'Business Administration': [
                 { value: 'BA', text: 'Business Administration' }
             ],
-            'Information Systems': [
-                { value: 'IS', text: 'Information Systems' }
+            'Computer Science': [
+                { value: 'CS', text: 'Computer Science' }
             ],
             'Banking and Finance': [
                 { value: 'BF', text: 'Banking and Finance' }
@@ -180,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="" disabled selected>Choose Your Course:</option>
                             <option value="Law">Law (LLB Honours)</option>
                             <option value="Business Administration">Business Administration</option>
-                            <option value="Information Systems">Information Systems</option>
+                            <option value="Computer Science">Computer Science</option>
                             <option value="Banking and Finance">Banking and Finance</option>
                             <option value="Nursing">Nursing</option>
                         </select>

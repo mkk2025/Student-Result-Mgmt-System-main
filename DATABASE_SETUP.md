@@ -87,31 +87,40 @@ After setting up the database, create a default lecturer/admin account:
 ```sql
 -- Insert default lecturer account
 -- Password: admin123 (MD5 hash)
+-- Using numeric ID format (e.g., 100)
 INSERT INTO `users` (`username`, `password`, `role`, `enroll_no`, `course`, `c_year`, `branch`) 
-VALUES ('Lecturer', '0192023a7bbd73250516f069df18b500', 'admin', 'LECT001', 'All Courses', 'All Years', 'All Branches');
+VALUES ('Lecturer', '0192023a7bbd73250516f069df18b500', 'admin', '100', 'All Courses', 'All Years', 'All Branches');
 ```
 
 **Default Lecturer Login:**
-- **ID Number**: LECT001
+- **ID Number**: 100
 - **Password**: admin123
 
 **Note:** Change the default password immediately after first login!
 
-### Sample Student Account
+### Sample Student Accounts (Numeric IDs)
+
+The system uses numeric Student IDs (e.g., 470, 471, 472):
 
 ```sql
--- Insert sample student account
+-- Insert sample student accounts with numeric IDs
 -- Password: student123 (MD5 hash)
 INSERT INTO `users` (`username`, `password`, `role`, `enroll_no`, `course`, `c_year`, `branch`) 
-VALUES ('John Doe', 'cd73502828457d15655bbd7a63fb0bc8', 'client', 'STU001', 'Business Administration', '1st Year', 'Business Administration');
+VALUES 
+('John Doe', 'cd73502828457d15655bbd7a63fb0bc8', 'client', '470', 'Computer Science', '1st Year', 'Computer Science'),
+('Jane Smith', 'cd73502828457d15655bbd7a63fb0bc8', 'client', '471', 'Business Administration', '2nd Year', 'Business Administration');
 
 INSERT INTO `students` (`name`, `enroll_no`, `branch_code`) 
-VALUES ('John Doe', 'STU001', 'BA001');
+VALUES 
+('John Doe', '470', 'CS001'),
+('Jane Smith', '471', 'BA001');
 ```
 
-**Sample Student Login:**
-- **ID Number**: STU001
-- **Password**: student123
+**Sample Student Logins:**
+- **Student 1**: ID Number: 470, Password: student123
+- **Student 2**: ID Number: 471, Password: student123
+
+**ID Format:** Use numeric IDs (e.g., 470, 471, 472) for students. The system accepts any numeric or alphanumeric ID format.
 
 ### Important Notes
 

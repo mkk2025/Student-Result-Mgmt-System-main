@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         button {
             width: 100%;
             padding: 10px;
-            background: #C8102E; /* IMATT College Red */
+            background: #E63946; /* Lighter IMATT College Red */
             border: none;
             cursor: pointer;
             font-size: 16px;
@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         button:hover {
-            background-color: #A01D26; /* Darker red on hover */
+            background-color: #D62839; /* Lighter darker red on hover */
         }
         .footer {
             bottom: 10px; /* Adjust the distance from the bottom of the page */

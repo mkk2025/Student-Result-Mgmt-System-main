@@ -58,18 +58,26 @@ CREATE TABLE IF NOT EXISTS `marks` (
 
 -- Insert default lecturer account
 -- Password: admin123 (MD5 hash)
+-- Using numeric ID format
 INSERT INTO `users` (`username`, `password`, `role`, `enroll_no`, `course`, `c_year`, `branch`) 
-VALUES ('Lecturer', '0192023a7bbd73250516f069df18b500', 'admin', 'LECT001', 'All Courses', 'All Years', 'All Branches')
+VALUES ('Lecturer', '0192023a7bbd73250516f069df18b500', 'admin', '100', 'All Courses', 'All Years', 'All Branches')
 ON DUPLICATE KEY UPDATE username=username;
 
--- Insert sample student account
+-- Insert sample student accounts with numeric IDs
 -- Password: student123 (MD5 hash)
+-- Example: Student ID 470 (as requested)
 INSERT INTO `users` (`username`, `password`, `role`, `enroll_no`, `course`, `c_year`, `branch`) 
-VALUES ('John Doe', 'cd73502828457d15655bbd7a63fb0bc8', 'client', 'STU001', 'Business Administration', '1st Year', 'Business Administration')
+VALUES 
+('John Doe', 'cd73502828457d15655bbd7a63fb0bc8', 'client', '470', 'Computer Science', '1st Year', 'Computer Science'),
+('Jane Smith', 'cd73502828457d15655bbd7a63fb0bc8', 'client', '471', 'Business Administration', '2nd Year', 'Business Administration'),
+('Test Student', 'cd73502828457d15655bbd7a63fb0bc8', 'client', '472', 'Law', '1st Year', 'Law')
 ON DUPLICATE KEY UPDATE username=username;
 
 INSERT INTO `students` (`name`, `enroll_no`, `branch_code`) 
-VALUES ('John Doe', 'STU001', 'BA001')
+VALUES 
+('John Doe', '470', 'CS001'),
+('Jane Smith', '471', 'BA001'),
+('Test Student', '472', 'LAW001')
 ON DUPLICATE KEY UPDATE name=name;
 
 -- Insert sample subject

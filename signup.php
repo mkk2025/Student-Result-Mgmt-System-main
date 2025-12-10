@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         button {
             width: 100%;
             padding: 10px;
-            background: #C8102E; /* IMATT College Red */
+            background: #E63946; /* Lighter IMATT College Red */
             border: none;
             cursor: pointer;
             font-size: 16px;
@@ -160,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         button:hover {
-            background-color: #A01D26; /* Darker red on hover */
+            background-color: #D62839; /* Lighter darker red on hover */
         }
         .footer {
             text-align: center;
@@ -210,8 +210,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'Business Administration': [
                 { value: 'Business Administration', text: 'Business Administration' }
             ],
-            'Information Systems': [
-                { value: 'Information Systems', text: 'Information Systems' }
+            'Computer Science': [
+                { value: 'Computer Science', text: 'Computer Science' }
             ],
             'Banking and Finance': [
                 { value: 'Banking and Finance', text: 'Banking and Finance' }
@@ -267,7 +267,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <option value="" disabled selected>Choose Your Course:</option>
                                 <option value="Law">Law (LLB Honours)</option>
                                 <option value="Business Administration">Business Administration</option>
-                                <option value="Information Systems">Information Systems</option>
+                                <option value="Computer Science">Computer Science</option>
                                 <option value="Banking and Finance">Banking and Finance</option>
                                 <option value="Nursing">Nursing</option>
                             </select>

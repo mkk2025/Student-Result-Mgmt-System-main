@@ -57,6 +57,30 @@ $stmt->execute();
 $result = $stmt->get_result();
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
+// Calculate GPA for selected semester
+$gpa = 0;
+$total_points = 0;
+$total_credits = 0;
+if (!empty($rows)) {
+    foreach ($rows as $row) {
+        $percentage = ($row['obtained_marks'] / $row['total_marks']) * 100;
+        // Convert percentage to GPA (4.0 scale)
+        if ($percentage >= 90) $points = 4.0;
+        elseif ($percentage >= 80) $points = 3.5;
+        elseif ($percentage >= 70) $points = 3.0;
+        elseif ($percentage >= 60) $points = 2.5;
+        elseif ($percentage >= 50) $points = 2.0;
+        else $points = 1.0;
+        
+        $credits = 3; // Assuming 3 credits per subject (can be made dynamic)
+        $total_points += ($points * $credits);
+        $total_credits += $credits;
+    }
+    if ($total_credits > 0) {
+        $gpa = $total_points / $total_credits;
+    }
+}
+
 // Check if data exists for the student
 if ($result->num_rows >= 0) {
 ?>
@@ -81,7 +105,7 @@ if ($result->num_rows >= 0) {
             text-align: center;
         }
         th {
-            background-color:#C8102E; /* IMATT College Red */
+            background-color:#E63946; /* Lighter IMATT College Red */
             color:white;
         }
         #marksheet {
@@ -92,7 +116,7 @@ if ($result->num_rows >= 0) {
         #downloadBtn{
             width:150px;
             height:50px;
-            background-color:#C8102E; /* IMATT College Red */
+            background-color:#E63946; /* Lighter IMATT College Red */
             color:white;
             border:none;
             border-radius:5px;
@@ -102,7 +126,7 @@ if ($result->num_rows >= 0) {
             transition: background-color 0.3s;
         }
         #downloadBtn:hover {
-            background-color:#A01D26; /* Darker red on hover */
+            background-color:#D62839; /* Lighter darker red on hover */
         }
         .semester-selector {
             margin: 20px 0;
@@ -170,7 +194,7 @@ if ($result->num_rows >= 0) {
                 
                 <div id="marksheet">
                     <br>
-                    <h1 style="text-shadow: 2px 2px 5px #888888;color:#C8102E;">IMATT COLLEGE</h1>
+                    <h1 style="text-shadow: 2px 2px 5px #888888;color:#E63946;">IMATT COLLEGE</h1>
                     <h2 style="text-shadow: 2px 2px 5px #888888;color:#BC8F8F;font-size:18px;">International Management, Accounting, Technology, and Tourism</h2>
                     <p style="color:#666;font-size:14px;">14 Off Hennessy Street, Kingtom, Freetown, Sierra Leone</p>
                     <p style="color:#666;font-size:14px;">Tel: +232 78 900082 | Email: info@imatcollege.com</p>
@@ -178,6 +202,11 @@ if ($result->num_rows >= 0) {
                     <h3>Name: <?php  foreach ($rows as $row) {echo htmlspecialchars($row['name'] ?? '');break;}/*echo htmlspecialchars($student_name??'');*/ ?> | Student ID: <?php echo htmlspecialchars($_SESSION['enroll_no']); ?></h3>
                     <?php if (!empty($selected_semester) && !empty($selected_academic_year)): ?>
                         <h3>Academic Year: <?php echo htmlspecialchars($selected_academic_year); ?> | Semester: <?php echo htmlspecialchars($selected_semester); ?></h3>
+                        <?php if ($gpa > 0): ?>
+                        <div style="background: linear-gradient(135deg, #E63946 0%, #D62839 100%); color: white; padding: 15px; border-radius: 10px; margin: 15px auto; max-width: 300px;">
+                            <h3 style="color: white; margin: 0;">Semester GPA: <strong><?php echo number_format($gpa, 2); ?></strong> / 4.0</h3>
+                        </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <br>
                     <table>

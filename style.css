@@ -30,7 +30,7 @@ body {
     top: 0;
     padding-top: 20px;
     width:300px;
-    background-color:#C8102E; /* IMATT College Red */
+    background-color:#E63946; /* Lighter IMATT College Red */
     /*background-color: hsla(0, 71%, 12%, 0.302);*/
     border-radius: 10px;
     /*box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);*/
@@ -57,7 +57,7 @@ body {
 }
 
 .sidebar ul li a:hover {
-    background-color: #A01D26; /* Darker red on hover */
+    background-color: #D62839; /* Lighter darker red on hover */
 }
 .container {
     /*
@@ -91,7 +91,7 @@ body {
 }
 
 .sidebar a.active {
-    background-color:#A01D26; /* Darker red for active page */
+    background-color:#D62839; /* Lighter darker red for active page */
     font-weight: bold;
     color:#FFD700; /* Gold color for active link text - IMATT College accent */
 }

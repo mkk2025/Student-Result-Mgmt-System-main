@@ -30,7 +30,7 @@ To facilitate teaching and learning geared towards emulating the University of L
 ### Programs Offered
 - Law (LLB Honours)
 - Business Administration
-- Information Systems
+- Computer Science
 - Banking and Finance
 - Nursing (Higher Diploma in Nursing in collaboration with COMAHS)
 
