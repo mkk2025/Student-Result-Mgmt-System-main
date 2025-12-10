@@ -105,8 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'BA': [
                 {value:'BA001',text:'BA001'}
             ],
-            'IS': [
-                {value:'IS001',text:'IS001'}
+            'CS': [
+                {value:'CS001',text:'CS001'}
             ],
             'BF': [
                 {value:'BF001',text:'BF001'}

@@ -9,31 +9,89 @@ include 'config.php';
 
 // Get student statistics
 $enroll_no = $_SESSION['enroll_no'];
-$student_info = mysqli_query($conn, "SELECT * FROM students WHERE enroll_no = '$enroll_no'")->fetch_assoc();
 
-// Get GPA and grade statistics
+// Get student info using prepared statement
+$stmt = $conn->prepare("SELECT * FROM students WHERE enroll_no = ?");
+$stmt->bind_param('s', $enroll_no);
+$stmt->execute();
+$student_info = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+// Get all marks for GPA calculation and statistics using prepared statement
+// Filter out records with zero total_marks to prevent division by zero
 $gpa_query = "SELECT 
-    AVG((marks.obtained_marks / marks.total_marks) * 4.0) as gpa,
-    COUNT(DISTINCT marks.semester) as semesters_completed,
-    COUNT(marks.id) as total_subjects
+    marks.obtained_marks,
+    marks.total_marks,
+    marks.semester
     FROM marks 
     JOIN students ON marks.student_id = students.id 
-    WHERE students.enroll_no = '$enroll_no'";
-$gpa_result = mysqli_query($conn, $gpa_query);
-$gpa_data = $gpa_result->fetch_assoc();
-$gpa = $gpa_data['gpa'] ? number_format($gpa_data['gpa'], 2) : '0.00';
-$semesters = $gpa_data['semesters_completed'] ?: 0;
-$subjects = $gpa_data['total_subjects'] ?: 0;
+    WHERE students.enroll_no = ? AND marks.total_marks > 0";
+$stmt = $conn->prepare($gpa_query);
+$stmt->bind_param('s', $enroll_no);
+$stmt->execute();
+$gpa_result = $stmt->get_result();
+$gpa_rows = $gpa_result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 
-// Get recent results
-$recent_results = mysqli_query($conn, 
-    "SELECT subjects.subject_name, marks.obtained_marks, marks.total_marks, marks.grade, marks.semester, marks.academic_year
+// Calculate GPA using discrete grade ranges (same as s_results.php)
+$gpa = 0;
+$total_points = 0;
+$total_credits = 0;
+$semesters = 0;
+$subjects = 0;
+
+if (!empty($gpa_rows)) {
+    // Calculate unique semesters and total subjects
+    $unique_semesters = [];
+    $subjects = count($gpa_rows);
+    
+    // Calculate GPA using same discrete ranges as s_results.php
+    foreach ($gpa_rows as $row) {
+        // Skip records with zero or null total_marks to prevent division by zero
+        if (empty($row['total_marks']) || $row['total_marks'] == 0) {
+            continue;
+        }
+        
+        // Track unique semesters
+        if (!empty($row['semester']) && !in_array($row['semester'], $unique_semesters)) {
+            $unique_semesters[] = $row['semester'];
+        }
+        
+        $percentage = ($row['obtained_marks'] / $row['total_marks']) * 100;
+        // Convert percentage to GPA (4.0 scale) - same ranges as s_results.php
+        if ($percentage >= 90) $points = 4.0;
+        elseif ($percentage >= 80) $points = 3.5;
+        elseif ($percentage >= 70) $points = 3.0;
+        elseif ($percentage >= 60) $points = 2.5;
+        elseif ($percentage >= 50) $points = 2.0;
+        else $points = 1.0;
+        
+        $credits = 3; // Assuming 3 credits per subject (can be made dynamic)
+        $total_points += ($points * $credits);
+        $total_credits += $credits;
+    }
+    
+    $semesters = count($unique_semesters);
+    
+    if ($total_credits > 0) {
+        $gpa = $total_points / $total_credits;
+    }
+}
+
+$gpa = number_format($gpa, 2);
+
+// Get recent results using prepared statement
+$recent_query = "SELECT subjects.subject_name, marks.obtained_marks, marks.total_marks, marks.grade, marks.semester, marks.academic_year
      FROM marks 
      JOIN students ON marks.student_id = students.id 
      JOIN subjects ON marks.subject_id = subjects.id 
-     WHERE students.enroll_no = '$enroll_no' 
+     WHERE students.enroll_no = ? 
      ORDER BY marks.academic_year DESC, marks.semester DESC 
-     LIMIT 5");
+     LIMIT 5";
+$stmt = $conn->prepare($recent_query);
+$stmt->bind_param('s', $enroll_no);
+$stmt->execute();
+$recent_results = $stmt->get_result();
 ?>
 
 <?php include 'sidebar.php'; ?>
@@ -216,6 +274,7 @@ $recent_results = mysqli_query($conn,
                     </table>
                 </div>
                 <?php endif; ?>
+                <?php $stmt->close(); ?>
             </div>
             <footer class="footer">
                 <?php include 'footer.php'; ?>
@@ -223,3 +282,8 @@ $recent_results = mysqli_query($conn,
         </div>
     </body>
 </html>
+
+<?php
+// Close database connection
+$conn->close();
+?>

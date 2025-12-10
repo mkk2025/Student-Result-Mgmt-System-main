@@ -109,8 +109,8 @@ $pending_results = 0; // Can be calculated based on your business logic
             <div class="content">
                 <div class="welcome-section">
                     <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
-                    <p style="color: #666; font-size: 16px;">Lecturer Dashboard - IMATT College Grading System</p>
-                    <p style="color: #888; margin-top: 10px;"><strong>Lecturer ID:</strong> <?php echo htmlspecialchars($_SESSION['enroll_no']); ?></p>
+                    <p style="color: white; font-size: 16px; opacity: 0.95;">Lecturer Dashboard - IMATT College Grading System</p>
+                    <p style="color: white; margin-top: 10px; opacity: 0.95;"><strong>Lecturer ID:</strong> <?php echo htmlspecialchars($_SESSION['enroll_no']); ?></p>
                 </div>
                 
                 <div class="dashboard-stats">

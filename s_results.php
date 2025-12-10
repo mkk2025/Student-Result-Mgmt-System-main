@@ -63,6 +63,11 @@ $total_points = 0;
 $total_credits = 0;
 if (!empty($rows)) {
     foreach ($rows as $row) {
+        // Skip records with zero or null total_marks to prevent division by zero
+        if (empty($row['total_marks']) || $row['total_marks'] == 0) {
+            continue;
+        }
+        
         $percentage = ($row['obtained_marks'] / $row['total_marks']) * 100;
         // Convert percentage to GPA (4.0 scale)
         if ($percentage >= 90) $points = 4.0;
@@ -82,7 +87,7 @@ if (!empty($rows)) {
 }
 
 // Check if data exists for the student
-if ($result->num_rows >= 0) {
+if ($result->num_rows > 0) {
 ?>
 <?php include 'sidebar.php'; ?>
 <!DOCTYPE html>
