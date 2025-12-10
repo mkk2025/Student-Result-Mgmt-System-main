@@ -135,8 +135,10 @@ $pending_results = 0; // Can be calculated based on your business logic
                     <div class="stat-card">
                         <h3>Quick Actions</h3>
                         <div style="margin-top: 20px;">
-                            <a href="a_students.php" class="action-btn">Manage Students</a>
-                            <a href="a_results.php" class="action-btn">Upload Grades</a>
+                            <a href="a_view_students.php" class="action-btn">👥 View Students</a>
+                            <a href="a_results.php" class="action-btn">📝 Upload Grades</a>
+                            <a href="a_view_grades.php" class="action-btn">📋 View Grades</a>
+                            <a href="a_subjects.php" class="action-btn">📚 Manage Subjects</a>
                         </div>
                     </div>
                 </div>

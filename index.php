@@ -7,35 +7,59 @@ header("Pragma: no-cache");
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id_number = $_POST['id_number']; // Student ID number (enrollment number)
-    $password = md5($_POST['password']); // You should use more secure hashing like bcrypt
+    $id_number = $_POST['id_number'];
+    $password_input = $_POST['password'];
 
-    // Check user credentials using enrollment number (ID number) - using prepared statement
-    $query = "SELECT * FROM users WHERE enroll_no = ? AND password = ?";
+    // Get user by enrollment number
+    $query = "SELECT * FROM users WHERE enroll_no = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ss", $id_number, $password);
+    $stmt->bind_param("s", $id_number);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role'];
-        $_SESSION['enroll_no'] = $user['enroll_no'];
-        $_SESSION['course'] = $user['course'];
-        $_SESSION['c_year'] = $user['c_year'];
-        $stmt->close();
-        if ($_SESSION['role'] == 'client') {
-            header('Location: dashboard.php');
+        $stored_password = $user['password'];
+        
+        // Check password - support both legacy MD5 and new password_hash
+        $password_valid = false;
+        
+        // Check if it's a new bcrypt hash (starts with $2y$)
+        if (strpos($stored_password, '$2y$') === 0) {
+            $password_valid = password_verify($password_input, $stored_password);
         } else {
-            header('Location: a_dashboard.php');
+            // Legacy MD5 check
+            $password_valid = ($stored_password === md5($password_input));
+            
+            // If MD5 login successful, upgrade to password_hash
+            if ($password_valid) {
+                $new_hash = password_hash($password_input, PASSWORD_DEFAULT);
+                $update_stmt = $conn->prepare("UPDATE users SET password = ? WHERE enroll_no = ?");
+                $update_stmt->bind_param("ss", $new_hash, $id_number);
+                $update_stmt->execute();
+                $update_stmt->close();
+            }
         }
-        exit();
-    } else {
-        $stmt->close();
-        echo "<script>alert('Invalid ID number or password'); window.location.href='index.php';</script>";
-        exit();
+        
+        if ($password_valid) {
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
+            $_SESSION['enroll_no'] = $user['enroll_no'];
+            $_SESSION['course'] = $user['course'];
+            $_SESSION['c_year'] = $user['c_year'];
+            $stmt->close();
+            if ($_SESSION['role'] == 'client') {
+                header('Location: dashboard.php');
+            } else {
+                header('Location: a_dashboard.php');
+            }
+            exit();
+        }
     }
+    
+    $stmt->close();
+    echo "<script>alert('Invalid ID number or password'); window.location.href='index.php';</script>";
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -222,8 +246,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <button type="submit" name="submit">Login</button>
                     </form>
-                    <!--<br>
-                    <h5>Not Registered Yet?  <button onclick="window.location.href='signup.php'" class="signup"><h4>SIGN UP</h4</button></h5>-->
+                    <br>
+                    <h5>Not Registered Yet?  
+                        <button onclick="window.location.href='signup_enhanced.php'" class="signup">
+                            <h4>SIGN UP</h4>
+                        </button>
+                    </h5>
                 </div>
             </div>   
             <footer class="footer">

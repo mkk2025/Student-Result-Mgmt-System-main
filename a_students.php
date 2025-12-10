@@ -36,10 +36,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         $stmt->close();
 
-        //insert into users table
+        //insert into users table with hashed password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $sql ="INSERT INTO users(username,password,role,enroll_no,course,c_year,branch) VALUES (?,?,?,?,?,?,?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssss", $name,$password,$role,$enroll_no,$course,$year,$branch);
+        $stmt->bind_param("sssssss", $name,$hashed_password,$role,$enroll_no,$course,$year,$branch);
         $stmt->execute();
         $stmt->close();
         // Commit transaction
